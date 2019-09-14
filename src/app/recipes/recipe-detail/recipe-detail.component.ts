@@ -12,26 +12,33 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 export class RecipeDetailComponent implements OnInit {
 
   recipe: Recipe;
-  constructor(private shopingserv: ShoppingListServices, private recipeserv: RecipesServices, private activeRoute: ActivatedRoute,private router:Router) { }
+  id;
+  // tslint:disable-next-line: max-line-length
+  constructor(private shopingserv: ShoppingListServices, private recipeserv: RecipesServices, private activeRoute: ActivatedRoute, private router: Router) { }
   ngOnInit() {
-    
+
     this.activeRoute.params.subscribe(
       (result: Params) => {
-        let id = +result.id
-        this.recipe = this.recipeserv.getRecipe(id);
+        this.id = +result.id;
+        this.recipe = this.recipeserv.getRecipe(this.id);
       }
     );
   }
   addToShoppingList() {
 
     this.shopingserv.addIngredientsToShoppingList(this.recipe.ingredients);
-    var result=confirm("Item Added,Do You Want To go to Your shopping list");
-    if(result){
+    // tslint:disable-next-line: quotemark
+    const result = confirm("Item Added,Do You Want To go to Your shopping list");
+    if (result) {
       this.router.navigate(['shoppinglist']);
     }
   }
-  onEditRecipe(){
+  onEditRecipe() {
 
-    this.router.navigate([this.recipe.id,'edit'],{relativeTo:this.activeRoute.parent});
+    this.router.navigate([this.recipe.id, 'edit'], { relativeTo: this.activeRoute.parent });
+  }
+  onDeleteRecipe() {
+    this.recipeserv.deleteRecipe(this.id);
+    this.router.navigate(['recipes']);
   }
 }
