@@ -4,7 +4,6 @@ import { Recipe } from '../recipes/recipe.model';
 import { RecipesServices } from './recipes.service';
 import { tap, map } from 'rxjs/operators';
 
-@Injectable({ providedIn: 'root' })
 export class DataStorageService {
     requrl = 'https://ng-recipe-app-46604.firebaseio.com';
     recipesurl = this.requrl + '/recipes.json';

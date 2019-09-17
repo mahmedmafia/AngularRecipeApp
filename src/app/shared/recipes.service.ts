@@ -47,9 +47,13 @@ export class RecipesServices {
         console.log(index);
         this.onRecipesChange.next(this.recipes.slice());
     }
-    deleteRecipe(id:number){
-        const index=this.recipes.findIndex(recipe=> recipe.id==id);
-        this.recipes.splice(index,1);
+    deleteRecipe(id: number) {
+        const index = this.recipes.findIndex(recipe => recipe.id == id);
+        this.recipes.splice(index, 1);
+        this.onRecipesChange.next(this.recipes.slice());
+    }
+    setRecipes(fetchedRecipe:Recipe[]){
+        this.recipes=fetchedRecipe;
         this.onRecipesChange.next(this.recipes.slice());
     }
 }
