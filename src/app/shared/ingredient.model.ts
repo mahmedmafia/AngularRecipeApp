@@ -7,5 +7,5 @@ export class Ingredient {
         this.name = name;
         this.amount = amount;
     }
-    
+
 }
