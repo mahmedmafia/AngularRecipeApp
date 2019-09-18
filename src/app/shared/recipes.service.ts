@@ -1,33 +1,18 @@
-import { Recipe } from '../recipes/recipe.model';
-
-import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Ingredient } from './ingredient.model';
+import { Recipe } from '../recipes/recipe.model';
+import { Subject } from 'rxjs';
+
 @Injectable()
-export class RecipesServices {
-
-    private recipes: Recipe[] = [
-        new Recipe(1,
-            'Tasty Schnitzel',
-            'A super-tasty Schnitzel - just awesome!',
-            'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
-            [
-                new Ingredient('Meat', 1),
-                new Ingredient('French Fries', 20)
-            ]),
-        new Recipe(2, 'Big Fat Burger',
-            'What else you need to say?',
-            'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
-            [
-                new Ingredient('Buns', 2),
-                new Ingredient('Meat', 1)
-            ])
-    ];
-
-    // private recipes: Recipe[] = [];
+export class RecipesService {
     onRecipesChange = new Subject<Recipe[]>();
-    getRecipes(): Recipe[] {
+    private recipes: Recipe[] = [];
 
+    setRecipes(recipes: Recipe[]) {
+        this.recipes = recipes;
+        this.onRecipesChange.next(this.recipes.slice());
+    }
+
+    getRecipes() {
         return this.recipes.slice();
     }
     getRecipe(id: number) {
@@ -46,8 +31,8 @@ export class RecipesServices {
             recipe => recipe.id === id
         );
         this.recipes[index] = newRecipe;
-        console.log(index);
         this.changeRecipe(this.recipes);
+
 
     }
     deleteRecipe(id: number) {
@@ -55,11 +40,31 @@ export class RecipesServices {
         this.recipes.splice(index, 1);
         this.changeRecipe(this.recipes);
     }
-    setRecipes(fetchedRecipe: Recipe[]) {
-        this.recipes = fetchedRecipe;
-        this.changeRecipe(this.recipes);
-    }
+
     private changeRecipe(recipes: Recipe[]) {
         this.onRecipesChange.next(recipes.slice());
     }
+    // setRecipes(fetchedRecipe: Recipe[]) {
+    //     this.recipes = fetchedRecipe;
+    //     console.log(this.recipes);
+    //     this.changeRecipe(fetchedRecipe);
+
+    // }
 }
+  // private recipes: Recipe[] = [
+    //     new Recipe(1,
+    //         'Tasty Schnitzel',
+    //         'A super-tasty Schnitzel - just awesome!',
+    //         'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+    //         [
+    //             new Ingredient('Meat', 1),
+    //             new Ingredient('French Fries', 20)
+    //         ]),
+    //     new Recipe(2, 'Big Fat Burger',
+    //         'What else you need to say?',
+    //         'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
+    //         [
+    //             new Ingredient('Buns', 2),
+    //             new Ingredient('Meat', 1)
+    //         ])
+    // ];

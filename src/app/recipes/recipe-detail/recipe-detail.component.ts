@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { ShoppingListServices } from 'src/app/shared/shopping-list.services';
-import { RecipesServices } from 'src/app/shared/recipes.service';
+import { RecipesService } from 'src/app/shared/recipes.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   id;
   // tslint:disable-next-line: max-line-length
-  constructor(private shopingserv: ShoppingListServices, private recipeserv: RecipesServices, private activeRoute: ActivatedRoute, private router: Router) { }
+  constructor(private shopingserv: ShoppingListServices, private recipeserv: RecipesService, private activeRoute: ActivatedRoute, private router: Router) { }
   ngOnInit() {
 
     this.activeRoute.params.subscribe(

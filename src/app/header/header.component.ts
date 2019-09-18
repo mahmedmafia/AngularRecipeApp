@@ -1,17 +1,22 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
+import { RecipesService } from '../shared/recipes.service';
+
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
 
-  constructor(private datasotreServ: DataStorageService) { }
+  constructor(private datasotreServ: DataStorageService, private recipeServ: RecipesService) { }
 
-  ngOnInit() {
+  LogChange() {
+    this.recipeServ.onRecipesChange.subscribe((d) => {
+      console.log(d);
+    });
   }
   onSaveData() {
     this.datasotreServ.storeRecipes();
