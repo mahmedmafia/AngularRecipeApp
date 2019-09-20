@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
-import { RecipesService } from '../shared/recipes.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 
 @Component({
@@ -8,20 +9,27 @@ import { RecipesService } from '../shared/recipes.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
 
+  isLoggedin = false;
+  private userSub: Subscription = new Subscription();
+  constructor(private datasotreServ: DataStorageService, private authServ: AuthService) { }
+  ngOnInit(): void {
+    this.userSub = this.authServ.user.subscribe((user) => {
+      if (user) {
+        this.isLoggedin = true;
+      }
 
-  constructor(private datasotreServ: DataStorageService, private recipeServ: RecipesService) { }
-
-  LogChange() {
-    this.recipeServ.onRecipesChange.subscribe((d) => {
-      console.log(d);
     });
+
   }
   onSaveData() {
     this.datasotreServ.storeRecipes();
   }
   onFetchData() {
     this.datasotreServ.fecthRecipes().subscribe();
+  }
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
   }
 }
