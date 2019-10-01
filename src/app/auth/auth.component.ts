@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
-    isLoginMode = false;
+    isLoginMode = true;
     @ViewChild('authForm', { static: false }) authForm: NgForm;
     constructor(private authServ: AuthService, private router: Router) { }
     error = null;

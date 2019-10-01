@@ -16,12 +16,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private datasotreServ: DataStorageService, private authServ: AuthService) { }
   ngOnInit(): void {
     this.userSub = this.authServ.user.subscribe((user) => {
-      if (user) {
-        this.isLoggedin = true;
-      }
+      
+        this.isLoggedin = user ? true :false ;
+      
 
     });
 
+  }
+  onLogOut() {
+    this.authServ.logout();
   }
   onSaveData() {
     this.datasotreServ.storeRecipes();
@@ -32,4 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
   }
+
 }
+

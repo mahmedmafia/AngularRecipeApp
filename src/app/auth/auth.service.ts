@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
     kind: string;
@@ -19,7 +20,8 @@ export class AuthService {
     private signUpUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.API_KEY}`;
     private loignUrl = ` https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${this.API_KEY}`;
     user = new BehaviorSubject<User>(null);
-    constructor(private http: HttpClient) { }
+    private tokenExpirationTimer;
+    constructor(private http: HttpClient, private router: Router) { }
     signUp(email: string, password: string) {
         return this.http
             .post<AuthResponseData>(this.signUpUrl, {
@@ -64,6 +66,48 @@ export class AuthService {
             );
     }
 
+    logout() {
+        this.user.next(null);
+        this.router.navigate(['/auth']);
+        localStorage.removeItem('userData');
+        if (this.tokenExpirationTimer) {
+            clearTimeout(this.tokenExpirationTimer);
+        }
+        this.tokenExpirationTimer = null;
+    }
+    autoLogout(expirationDuration: number) {
+
+        return this.tokenExpirationTimer = setTimeout(() => {
+            this.logout();
+        }, expirationDuration);
+    }
+    autoLogin() {
+        let expirationDuration;
+        const userData: {
+            email: string,
+            id: string,
+            _token: string,
+            _tokenExpirationDate: string,
+        } = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) {
+            return;
+        }
+        if (userData) {
+            const LoggedUser = new User(
+                userData.email
+                , userData.id,
+                userData._token,
+                new Date(userData._tokenExpirationDate));
+            if (LoggedUser.token) {
+                this.user.next(LoggedUser);
+                expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+                this.autoLogout(expirationDuration);
+            }
+
+        }
+        console.log((expirationDuration / 1000) / 60);
+
+    }
 
     private handleAuth(
         email: string,
@@ -74,6 +118,8 @@ export class AuthService {
         const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
         const user = new User(email, userId, token, expirationDate);
         this.user.next(user);
+        this.autoLogout(expiresIn * 1000);
+        localStorage.setItem('userData', JSON.stringify(user));
     }
     private handleErr(errRes: HttpErrorResponse) {
         let errMsg = 'An Unknow Error Occured';
