@@ -6,22 +6,25 @@ import { Router } from '@angular/router';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceHolderDirective } from '../shared/placeholder/placeholder.directive';
 
-
 @Component({
     selector: 'app-auth',
     templateUrl: './auth.component.html',
     styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit,OnDestroy {
-   
+export class AuthComponent implements OnInit, OnDestroy {
+
     isLoginMode = true;
     @ViewChild('authForm', { static: false }) authForm: NgForm;
     constructor(private authServ: AuthService
+        // tslint:disable-next-line: align
         , private router: Router
+        // tslint:disable-next-line: align
         , private componentFactoryResolver: ComponentFactoryResolver) { }
     @ViewChild(PlaceHolderDirective, { static: false }) alertHost: PlaceHolderDirective;
     error = null;
     isLoading = false;
+    private closeSub: Subscription;
+
     ngOnInit(): void { }
 
     onSwitchMode() {
@@ -58,7 +61,6 @@ export class AuthComponent implements OnInit,OnDestroy {
 
         this.error = null;
     }
-    private closeSub: Subscription;
     private showErrorAlert(errMessage: string) {
         // const alert = new AlertComponent();
         const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(
@@ -75,7 +77,7 @@ export class AuthComponent implements OnInit,OnDestroy {
         });
     }
     ngOnDestroy(): void {
-        if(this.closeSub){
+        if (this.closeSub) {
             this.closeSub.unsubscribe();
         }
     }

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../recipes/recipe.model';
-import { RecipesService } from './recipes.service';
 import { tap, map, exhaustMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
-import { User } from '../auth/user.model';
+import { RecipesService } from './recipes.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -13,9 +12,7 @@ export class DataStorageService {
     recipesurl = this.requrl + '/recipes.json';
     ingredurl = this.requrl + '/ingredients.json';
     constructor(private http: HttpClient,
-        // tslint:disable-next-line: align
         private recipeServ: RecipesService,
-        // tslint:disable-next-line: align
         private authServ: AuthService) { }
 
     storeRecipes() {
