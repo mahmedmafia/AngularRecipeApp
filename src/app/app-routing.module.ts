@@ -1,41 +1,18 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ShoppingListComponent } from './ShoppingList/shopping-list.component';
-import { RecipesComponent } from './recipes/recipes.component';
-import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
-import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
-import { RecipesResolverService } from './recipes/recipes-resolver.service';
-import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
-import { AuthComponent } from './auth/auth.component';
-import { AuthGuardService } from './auth/auth-guard.service';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
+
 
 const routes: Routes = [
-    { path: 'shoppinglist', component: ShoppingListComponent },
-    {
-        path: 'recipes',
-        component: RecipesComponent,
-        canActivateChild: [AuthGuardService],
-        canActivate: [AuthGuardService]
-        , children: [
-
-            {
-                path: ':id/details', component: RecipeDetailComponent
-                , resolve: [RecipesResolverService]
-            },
-            { path: ':id/edit', component: RecipeEditComponent, resolve: [RecipesResolverService] },
-            { path: 'new', component: RecipeEditComponent },
-            { path: '', component: RecipeStartComponent },
-
-        ]
-    },
     { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-    { path: 'auth', component: AuthComponent },
+    { path: 'recipes', loadChildren: './recipes/recipes.module#RecipesModule' },
+    { path: 'shoppinglist', loadChildren: './ShoppingList/shopping-list.module#ShoppingListModule' },
+    { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },
 
     // { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
     exports: [RouterModule]
 })
 export class AppRoutingModule { }
