@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Recipe } from '../recipe.model';
-import { ShoppingListServices } from 'src/app/shared/shopping-list.services';
 import { RecipesService } from 'src/app/shared/recipes.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-
+import { Store } from '@ngrx/store';
+import * as ShoppingListActions from 'src/app/ShoppingList/store/shopping-list.action';
+import * as fromShoppingList from 'src/app/ShoppingList/store/shopping-list.reducer';
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
@@ -14,7 +15,7 @@ export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   id;
   // tslint:disable-next-line: max-line-length
-  constructor(private shopingserv: ShoppingListServices, private recipeserv: RecipesService, private activeRoute: ActivatedRoute, private router: Router) { }
+  constructor(private store: Store<fromShoppingList.AppState>, private recipeserv: RecipesService, private activeRoute: ActivatedRoute, private router: Router) { }
   ngOnInit() {
 
     this.activeRoute.params.subscribe(
@@ -26,7 +27,8 @@ export class RecipeDetailComponent implements OnInit {
   }
   addToShoppingList() {
 
-    this.shopingserv.addIngredientsToShoppingList(this.recipe.ingredients);
+    this.store.dispatch(new ShoppingListActions.AddIngredients(this.recipe.ingredients));
+
     // tslint:disable-next-line: quotemark
     const result = confirm("Item Added,Do You Want To go to Your shopping list");
     if (result) {

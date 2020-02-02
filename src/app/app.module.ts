@@ -4,18 +4,16 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ShoppingListServices } from './shared/shopping-list.services';
 import { RecipesService } from './shared/recipes.service';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { shoppingListReducer } from './ShoppingList/store/shopping-list.reducer';
-
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -23,10 +21,11 @@ import { shoppingListReducer } from './ShoppingList/store/shopping-list.reducer'
     HttpClientModule,
     SharedModule,
     StoreModule.forRoot({
-      shoppingList:shoppingListReducer
-    })
+      shoppingList: shoppingListReducer
+    }),
+    StoreDevtoolsModule.instrument({})
   ],
-  providers: [ShoppingListServices, RecipesService,
+  providers: [ RecipesService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
