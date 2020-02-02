@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { Store } from '@ngrx/store';
 import * as ShoppingListActions from '../store/shopping-list.action';
-import * as fromShoppingList from '../store/shopping-list.reducer';
+import * as fromRoot from '../../store/app.reducer';
+
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -19,11 +20,11 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editMode = false;
   subscribtion: Subscription;
   constructor(
-    private store: Store<fromShoppingList.AppState>
+    private store: Store<fromRoot.AppState>
   ) { }
 
   ngOnInit() {
-    this.subscribtion = this.store.select(fromShoppingList.getShoppingListFeatureState).subscribe(res => {
+    this.subscribtion = this.store.select('shoppingList').subscribe(res => {
 
       let Ingredient = res.editedIngredient;
       if (Ingredient) {

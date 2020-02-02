@@ -1,11 +1,9 @@
-import { Directive, HostListener, HostBinding, ElementRef, Renderer2, OnInit } from '@angular/core';
-import { tryParse } from 'selenium-webdriver/http';
+import { Directive, HostListener, HostBinding, } from '@angular/core';
 
 @Directive({
     selector: '[appDropdown]',
 })
 export class DropdownDirective {
-    constructor(private elRef: ElementRef, private render: Renderer2) { }
 
     /*using The Rendred*/
     // isOpen=false;
