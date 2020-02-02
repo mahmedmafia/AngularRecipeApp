@@ -8,8 +8,8 @@ import { RecipesService } from './shared/recipes.service';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
+import { shoppingListReducer } from './ShoppingList/store/shopping-list.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import * as fromRoot from './store/app.reducer';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +20,9 @@ import * as fromRoot from './store/app.reducer';
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    StoreModule.forRoot(fromRoot.appReducers),
+    StoreModule.forRoot({
+      shoppingList: shoppingListReducer
+    }),
     StoreDevtoolsModule.instrument({})
   ],
   providers: [ RecipesService,
