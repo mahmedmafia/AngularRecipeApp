@@ -8,9 +8,11 @@ import { RecipesService } from './shared/recipes.service';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
-import { shoppingListReducer } from './ShoppingList/store/shopping-list.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+
 import * as fromRoot from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,9 +24,10 @@ import * as fromRoot from './store/app.reducer';
     HttpClientModule,
     SharedModule,
     StoreModule.forRoot(fromRoot.appReducers),
-    StoreDevtoolsModule.instrument({})
+    StoreDevtoolsModule.instrument({}),
+    EffectsModule.forRoot([AuthEffects]),
   ],
-  providers: [ RecipesService,
+  providers: [RecipesService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

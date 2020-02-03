@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.authServ.autoLogin();
+    // this.authServ.autoLogin();
   }
 
 
