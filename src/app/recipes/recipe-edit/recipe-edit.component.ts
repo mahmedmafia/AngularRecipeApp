@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RecipesService } from 'src/app/shared/recipes.service';
-import { FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormArray, FormGroup, FormControl, Validators, Form } from '@angular/forms';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
 
 @Component({
@@ -87,6 +87,9 @@ export class RecipeEditComponent implements OnInit {
 
     }
 
+  }
+  get recipeIngredientsArray():FormArray{
+    return this.recipeForm.get('ingredients') as FormArray;
   }
   onSubmit() {
     if (this.editMode) {
