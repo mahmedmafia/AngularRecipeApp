@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Recipe } from '../recipe.model';
-import { RecipesService } from 'src/app/shared/recipes.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as ShoppingListActions from 'src/app/ShoppingList/store/shopping-list.action';

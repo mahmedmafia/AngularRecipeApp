@@ -4,7 +4,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
-import { RecipesService } from './shared/recipes.service';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
@@ -28,7 +27,7 @@ import { RecipesEffects } from './recipes/store/recipes.effects';
     StoreDevtoolsModule.instrument({}),
     EffectsModule.forRoot([AuthEffects, RecipesEffects]),
   ],
-  providers: [RecipesService,
+  providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

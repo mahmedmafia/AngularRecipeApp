@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { RecipesService } from 'src/app/shared/recipes.service';
 import { FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
-import { DataStorageService } from 'src/app/shared/data-storage.service';
 import * as fromRoot from '../../store/app.reducer';
 import * as recipeActions from '../store/recipes.action';
 import { Store } from '@ngrx/store';

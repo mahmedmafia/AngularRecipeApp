@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { Subscription, Observable } from 'rxjs';
-import { RecipesService } from 'src/app/shared/recipes.service';
 import * as fromRoot from 'src/app/store/app.reducer';
 import { Store } from '@ngrx/store';
 @Component({
@@ -13,7 +12,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   recipes: Recipe[];
   recipeChangeSub: Subscription;
-  constructor(private recipeServ: RecipesService, private store: Store<fromRoot.AppState>) { }
+  constructor(private store: Store<fromRoot.AppState>) { }
 
   ngOnInit() {
     // this.recipeChangeSub = this.recipeServ.onRecipesChange
