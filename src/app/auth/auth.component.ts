@@ -25,7 +25,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         private store: Store<fromRoot.AppState>) { }
     @ViewChild(PlaceHolderDirective, { static: false }) alertHost: PlaceHolderDirective;
     error = null;
-    isLoading = false; 
+    isLoading = false;
     private closeSub: Subscription;
     storeSub: Subscription;
     ngOnInit(): void {
@@ -52,7 +52,7 @@ export class AuthComponent implements OnInit, OnDestroy {
             // Login
             // authObs = this.authServ.login(email, password);
             this.store.dispatch(new authActions.LoginStart({ email, password }));
-
+            console.log('loggin');
         } else {
             // SignUp
             this.store.dispatch(new authActions.SignupStart({ email, password }))

@@ -13,6 +13,7 @@ import { EffectsModule } from '@ngrx/effects';
 
 import * as fromRoot from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
+import { RecipesEffects } from './recipes/store/recipes.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +26,7 @@ import { AuthEffects } from './auth/store/auth.effects';
     SharedModule,
     StoreModule.forRoot(fromRoot.appReducers),
     StoreDevtoolsModule.instrument({}),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipesEffects]),
   ],
   providers: [RecipesService,
     {

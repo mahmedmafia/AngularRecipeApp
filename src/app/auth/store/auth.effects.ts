@@ -1,4 +1,4 @@
-import { Actions, Effect,  ofType } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import * as AuthActions from './auth.action';
 import { switchMap, catchError, map, tap } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
@@ -27,7 +27,8 @@ const handleAuth = (resData: AuthResponseData) => {
             email: resData.email,
             userId: resData.localId,
             token: resData.idToken,
-            expirationDate
+            expirationDate,
+            redirect: true,
         }
     );
 }
@@ -61,7 +62,6 @@ export class AuthEffects {
     constructor(private actions$: Actions, private http: HttpClient, private router: Router, private authServ: AuthService) { }
     @Effect()
     authLogin$ = this.actions$.pipe(
-
         ofType<AuthActions.LoginStart>(AuthActions.LOGIN_START),
         switchMap((authData: AuthActions.LoginStart) => {
             return this.http
@@ -79,8 +79,10 @@ export class AuthEffects {
 
     @Effect({ dispatch: false })
     authSuccess$ = this.actions$.pipe(
-        ofType(AuthActions.LOGIN), tap(() => {
-            this.router.navigate(['/']);
+        ofType(AuthActions.LOGIN), tap((authLoginAction: AuthActions.Login) => {
+            if (authLoginAction.payload.redirect) {
+                this.router.navigate(['/']);
+            }
         })
 
     );
@@ -137,7 +139,8 @@ export class AuthEffects {
                             email: LoggedUser.email,
                             token: LoggedUser.token,
                             userId: LoggedUser.id,
-                            expirationDate: new Date(userData._tokenExpirationDate)
+                            expirationDate: new Date(userData._tokenExpirationDate),
+                            redirect: false
                         }
                     );
 
