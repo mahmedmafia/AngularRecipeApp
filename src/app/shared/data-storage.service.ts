@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../recipes/recipe.model';
 import { tap, map, exhaustMap, take } from 'rxjs/operators';
-import { AuthService } from '../auth/auth.service';
-import { RecipesService } from './recipes.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -11,20 +9,14 @@ export class DataStorageService {
     requrl = 'https://ng-recipe-app-46604.firebaseio.com';
     recipesurl = this.requrl + '/recipes.json';
     ingredurl = this.requrl + '/ingredients.json';
-    constructor(private http: HttpClient,
-        private recipeServ: RecipesService,
-        private authServ: AuthService) { }
+    constructor(private http: HttpClient) { }
 
-    storeRecipes() {
-        const recipes = this.recipeServ.getRecipes();
-        this.http
+    storeRecipes(recipes) {
+        return this.http
             .put(
                 this.recipesurl,
                 recipes
-            )
-            .subscribe(response => {
-                console.log(response);
-            });
+            );
     }
     fecthRecipes() {
 
@@ -38,10 +30,7 @@ export class DataStorageService {
                         ingredients: recipe.ingredients ? recipe.ingredients : []
                     };
                 });
-            }),
-                tap(recipes => {
-                    this.recipeServ.setRecipes(recipes);
-                })
+            })
             );
 
 

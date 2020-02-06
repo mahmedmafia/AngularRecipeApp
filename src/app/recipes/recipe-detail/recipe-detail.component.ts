@@ -1,32 +1,46 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Recipe } from '../recipe.model';
-import { ShoppingListServices } from 'src/app/shared/shopping-list.services';
-import { RecipesService } from 'src/app/shared/recipes.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as ShoppingListActions from 'src/app/ShoppingList/store/shopping-list.action';
+import * as recipeActions from 'src/app/recipes/store/recipes.action';
 
+import * as fromRoot from '../../store/app.reducer';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.css']
 })
-export class RecipeDetailComponent implements OnInit {
+export class RecipeDetailComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    // this.store.dispatch(new recipeActions.CancelLoadRecipe());
+    this.storeSub.unsubscribe();
+    this.store.dispatch(new recipeActions.CancelLoadRecipe());
+  }
 
   recipe: Recipe;
   id;
+  storeSub: Subscription;
   // tslint:disable-next-line: max-line-length
-  constructor(private shopingserv: ShoppingListServices, private recipeserv: RecipesService, private activeRoute: ActivatedRoute, private router: Router) { }
+  constructor(private store: Store<fromRoot.AppState>, private activeRoute: ActivatedRoute, private router: Router) { }
   ngOnInit() {
-
     this.activeRoute.params.subscribe(
-      (result: Params) => {
-        this.id = +result.id;
-        this.recipe = this.recipeserv.getRecipe(this.id);
+      (params: Params) => {
+        this.id = +params.id;
+        this.store.dispatch(new recipeActions.LoadRecipe(this.id));
       }
     );
+
+    this.storeSub = this.store.select('recipes').subscribe(res => {
+      this.recipe = res.editedRecipe;
+      this.id = res.editedRecipedId;
+    });
   }
   addToShoppingList() {
 
-    this.shopingserv.addIngredientsToShoppingList(this.recipe.ingredients);
+    this.store.dispatch(new ShoppingListActions.AddIngredients(this.recipe.ingredients));
+
     // tslint:disable-next-line: quotemark
     const result = confirm("Item Added,Do You Want To go to Your shopping list");
     if (result) {
@@ -38,7 +52,8 @@ export class RecipeDetailComponent implements OnInit {
     this.router.navigate([this.recipe.id, 'edit'], { relativeTo: this.activeRoute.parent });
   }
   onDeleteRecipe() {
-    this.recipeserv.deleteRecipe(this.id);
+    this.store.dispatch(new recipeActions.DeleteRecipe(this.id));
+
     this.router.navigate(['recipes']);
   }
 }
