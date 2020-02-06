@@ -104,6 +104,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     }
 
   }
+  get recipeIngredientsArray() {
+    return this.recipeForm.get('ingredients') as FormArray;
+  }
   onSubmit() {
     if (this.editMode) {
       // this.recipeserv.updateRecipe(this.id, this.recipeForm.value);
