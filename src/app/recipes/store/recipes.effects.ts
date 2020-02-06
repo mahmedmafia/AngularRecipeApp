@@ -18,7 +18,6 @@ export class RecipesEffects {
     @Effect()
     fetchRecipes$: Observable<Action> = this.actions$.pipe(ofType(recipeActions.LOAD_RECIPES),
         switchMap((data: recipeActions.LoadRecipes) => {
-            console.log(data);
             return this.dataStore.fecthRecipes()
                 .pipe(map(res => {
                     return new recipeActions.LoadRecipesSuccess(res);

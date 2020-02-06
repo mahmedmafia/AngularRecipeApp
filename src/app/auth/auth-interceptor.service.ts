@@ -16,7 +16,6 @@ import { Store } from '@ngrx/store';
 export class AuthInterceptorService implements HttpInterceptor {
     constructor(private store: Store<fromRoot.AppState>) { }
     intercept(req: HttpRequest<any>, next: HttpHandler) {
-        console.log(req);
         return this.store.select('auth')
             .pipe(
                 take(1),

@@ -15,6 +15,9 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<any> | Promise<any> | any {
-        return this.actions$.pipe(ofType(recipeActions.LOAD_RECIPES_SUCCESS),take(1))
+
+        this.store.dispatch(new recipeActions.LoadRecipes());
+        return this.actions$.pipe(ofType(recipeActions.LOAD_RECIPES_SUCCESS), take(1));
+
     }
 }

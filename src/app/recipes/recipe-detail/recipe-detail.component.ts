@@ -16,6 +16,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // this.store.dispatch(new recipeActions.CancelLoadRecipe());
     this.storeSub.unsubscribe();
+    this.store.dispatch(new recipeActions.CancelLoadRecipe());
   }
 
   recipe: Recipe;
@@ -24,7 +25,12 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line: max-line-length
   constructor(private store: Store<fromRoot.AppState>, private activeRoute: ActivatedRoute, private router: Router) { }
   ngOnInit() {
-
+    this.activeRoute.params.subscribe(
+      (params: Params) => {
+        this.id = +params.id;
+        this.store.dispatch(new recipeActions.LoadRecipe(this.id));
+      }
+    );
 
     this.storeSub = this.store.select('recipes').subscribe(res => {
       this.recipe = res.editedRecipe;
